@@ -1,0 +1,58 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'Byte Bard Software'
+theme = "hermit-v2"
+
+
+[params.author]
+  name = "Borja Lorente"
+
+[params]
+  dateform        = "Jan 2, 2006"
+  dateformShort   = "Jan 2"
+  dateformNum     = "2006-01-02"
+  dateformNumTime = "2006-01-02 15:04 -0700"
+
+  description = "This is the desxcription of a site."
+  # images = [""]
+  themeColor = "#494f5c"
+
+  homeSubtitle = "Crafting delightful, playful software."
+  footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
+  # bgImg = ""
+  gitUrl = "https://github.com/blorente/blog"
+
+  justifyContent = false
+
+  relatedPosts = true
+  code_copy_button = true
+
+  homeSubtitlePrinter = true
+  scrollToTop = true 
+  global_mathjax = false
+  readTime = true
+  readTimeSeparator = "CHANGE ME READ TIME"
+  # legacyLayout = false
+  shareSocial = true
+  # googleTagManager = "GTM-XXXXXXXX"
+  # tagSymbol = "#"
+  # categorySymbol = "⊲"
+  # pinned = "Pinned Posts"
+  # pinnedSVGname = "pin"
+  # descriptionInPosts= true
+  # initialPublish = "Initally Posted on: "
+
+  [[params.socialLinks]]
+    name = "x"
+    url = "https://twitter.com/BLorenteEs"
+
+  [[params.socialLinks]]
+    name = "github"
+    url = "https://github.com/blorente"
+
+[menu]
+
+  [[menu.main]]
+    name = "Blog"
+    url = "posts/"
+    weight = 10
