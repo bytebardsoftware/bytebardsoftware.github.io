@@ -7,6 +7,10 @@ theme = "hermit-v2"
 [params.author]
   name = "Borja Lorente"
 
+[taxonomies]
+  tags = "tags"
+  category = "categories"
+
 [params]
   dateform        = "Jan 2, 2006"
   dateformShort   = "Jan 2"
@@ -15,11 +19,10 @@ theme = "hermit-v2"
 
   description = "This is the desxcription of a site."
   # images = [""]
-  themeColor = "#494f5c"
+  themeColor = "#FFFFFF"
 
   homeSubtitle = "Crafting delightful, playful software."
   footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
-  # bgImg = ""
   gitUrl = "https://github.com/blorente/blog"
 
   justifyContent = false
@@ -31,15 +34,12 @@ theme = "hermit-v2"
   scrollToTop = true 
   global_mathjax = false
   readTime = true
-  readTimeSeparator = "CHANGE ME READ TIME"
-  # legacyLayout = false
+  readTimeSeparator = ""
   shareSocial = true
   # googleTagManager = "GTM-XXXXXXXX"
-  # tagSymbol = "#"
-  # categorySymbol = "⊲"
-  # pinned = "Pinned Posts"
-  # pinnedSVGname = "pin"
-  # descriptionInPosts= true
+  tagSymbol = "#"
+  pinned = "Pinned Posts"
+  descriptionInPosts= true
   # initialPublish = "Initally Posted on: "
 
   [[params.socialLinks]]
