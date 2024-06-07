@@ -1,0 +1,32 @@
+.home-site-nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.1em;
+  opacity: .8;
+  padding: 2px;
+
+  .has-children {
+    padding-right: .5em;
+    border-right: 2px solid $highlight-grey;
+  }
+
+  .sub-menu > a{
+    margin-left: .3em;
+  }
+
+  a {
+    margin-left: .8em;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: 6rem;
+    border: 1px solid;
+    border-color: white;
+  }
+
+  a:hover {
+    border: 2px solid;
+  }
+}
