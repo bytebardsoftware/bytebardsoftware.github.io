@@ -48,8 +48,13 @@
   ],
   "frontMatter.content.pageFolders": [
     {
-      "path": "[[workspace]]/content/posts"
+      "title": "Blog Posts",
+      "path": "[[workspace]]/content/posts",
+      "previewPath": "posts"
     }
   ],
-  "frontMatter.git.enabled": true
+  "frontMatter.git.enabled": true,
+  "frontMatter.content.publicFolder": "static",
+  "frontMatter.framework.id": "hugo",
+  "frontMatter.preview.host": "http://localhost:1313"
 }
