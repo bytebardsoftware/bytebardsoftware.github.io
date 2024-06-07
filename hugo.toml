@@ -22,7 +22,7 @@ theme = "hermit-v2"
   themeColor = "#FFFFFF"
 
   homeSubtitle = "Crafting delightful, playful software."
-  footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
+  #footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
   gitUrl = "https://github.com/blorente/blog"
 
   justifyContent = false
