@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://bytebard.software/'
 languageCode = 'en-us'
 title = 'Byte Bard Software'
 theme = "hermit-v2"
