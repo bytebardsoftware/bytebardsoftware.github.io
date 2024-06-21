@@ -56,3 +56,8 @@ theme = "hermit-v2"
     name = "Blog"
     url = "posts/"
     weight = 10
+
+  [[menu.main]]
+    name = "Bardic Tools"
+    url = "https://bardic.tools"
+    weight = 20
