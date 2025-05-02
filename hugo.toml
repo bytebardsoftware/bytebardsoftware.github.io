@@ -53,11 +53,16 @@ theme = "hermit-v2"
 [menu]
 
   [[menu.main]]
+    name = "Bazel"
+    url = "bazel/"
+    weight = 10
+
+  [[menu.main]]
     name = "Blog"
     url = "posts/"
-    weight = 10
+    weight = 20
 
   [[menu.main]]
     name = "Bardic Tools"
     url = "https://bardic.tools"
-    weight = 20
+    weight = 30
