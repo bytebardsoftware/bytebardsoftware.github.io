@@ -5,69 +5,71 @@ theme = "hermit-v2"
 
 
 [params.author]
-  name = "Borja Lorente"
+name = "Borja Lorente"
 
 [taxonomies]
-  tags = "tags"
-  category = "categories"
+tags = "tags"
+category = "categories"
 
 [params]
-  dateform        = "Jan 2, 2006"
-  dateformShort   = "Jan 2"
-  dateformNum     = "2006-01-02"
-  dateformNumTime = "2006-01-02 15:04 -0700"
+dateform = "Jan 2, 2006"
+dateformShort = "Jan 2"
+dateformNum = "2006-01-02"
+dateformNumTime = "2006-01-02 15:04 -0700"
 
-  description = "This is the desxcription of a site."
-  # images = [""]
-  themeColor = "#FFFFFF"
+description = "This is the desxcription of a site."
+# images = [""]
+themeColor = "#FFFFFF"
 
-  homeSubtitle = "Crafting delightful, playful software."
-  #footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
-  gitUrl = "https://github.com/blorente/blog"
+homeSubtitle = "Crafting delightful, playful software."
+#footerCopyright = "CHANGE ME FOOTER COPYRIGHT"
+gitUrl = "https://github.com/blorente/blog"
 
-  justifyContent = false
+justifyContent = false
 
-  relatedPosts = true
-  code_copy_button = true
+relatedPosts = true
+code_copy_button = true
 
-  homeSubtitlePrinter = true
-  scrollToTop = true 
-  global_mathjax = false
-  readTime = true
-  readTimeSeparator = ""
-  shareSocial = true
-  # googleTagManager = "GTM-XXXXXXXX"
-  tagSymbol = "#"
-  pinned = "Pinned Posts"
-  descriptionInPosts= true
-  # initialPublish = "Initally Posted on: "
+homeSubtitlePrinter = true
+scrollToTop = true
+global_mathjax = false
+readTime = true
+readTimeSeparator = ""
+shareSocial = true
+# googleTagManager = "GTM-XXXXXXXX"
+tagSymbol = "#"
+pinned = "Pinned Posts"
+descriptionInPosts = true
+# initialPublish = "Initally Posted on: "
 
-  [[params.socialLinks]]
-    name = "x"
-    url = "https://twitter.com/BLorenteEs"
+[gallery]
+enable = true
 
-  [[params.socialLinks]]
-    name = "github"
-    url = "https://github.com/blorente"
+[[params.socialLinks]]
+name = "x"
+url = "https://twitter.com/BLorenteEs"
+
+[[params.socialLinks]]
+name = "github"
+url = "https://github.com/blorente"
+
+[markup]
+[markup.goldmark.renderer]
+unsafe = true
 
 [menu]
 
-  [[menu.main]]
-    name = "Engineering"
-    url = "bazel/"
-    weight = 10
+[[menu.main]]
+name = "Blog"
+url = "posts/"
+weight = 10
 
-  [[menu.main]]
-    name = "Business"
-    url = "posts/"
-    weight = 20
+[[menu.main]]
+name = "Consulting Services"
+url = "build/"
+weight = 30
 
-  [[menu.main]]
-    name = "Services"
-    url = "/hireme"
-    weight = 30
-
-  [[menu.main]]
-    name = "Bardic Tools"
-    url = "https://bardic.tools"
-    weight = 40
+[[menu.main]]
+name = "Bardic Tools"
+url = "https://bardic.tools"
+weight = 40
