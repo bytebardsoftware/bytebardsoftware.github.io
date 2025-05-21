@@ -24,10 +24,10 @@ Click here to book a free initial consultation
 
 ## Credentials
 
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; height: 5rem; margin-bottom: 5rem; margin-top: 2rem; align-items: center; justify-items: center;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 5rem; margin-bottom: 5rem; margin-top: 2rem; align-items: center; justify-items: center;">
 
 <img style="height: 7rem; object-fit: contain;" src="/img/apple-icon.svg" />
-<img style="height: 7rem; object-fit: contain;" src="/img/gradle-icon.png" />
+<!-- <img style="height: 7rem; object-fit: contain;" src="/img/gradle-icon.png" /> -->
 <object type="image/svg+xml" data="/img/twitter-icon.svg" 
 style="height: 7rem; object-fit: contain;">
 </object>
