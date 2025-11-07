@@ -1,0 +1,26 @@
+<div class="card bg-base-100 shadow-xl border border-base-300 max-w-2xl mx-auto">
+  <div class="card-body">
+    <h2 class="card-title text-3xl mb-4">Send me more cool stuff</h2>
+    <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="newsletter" />
+
+      <!-- Honeypot field for spam protection -->
+      <p class="hidden">
+        <label>
+          Don't fill this out if you're human: <input name="bot-field" />
+        </label>
+      </p>
+
+      <div class="form-control w-full mb-4">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input type="email" name="email" placeholder="your@email.com" class="input input-bordered w-full" required />
+      </div>
+
+      <div class="card-actions justify-end mt-4">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</div>
