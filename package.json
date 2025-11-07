@@ -1,0 +1,23 @@
+{
+  "name": "bytebard.software",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently npm:watch:*",
+    "build-tw": "npx tailwindcss -i ./assets/css/unprocessed_main.css -o ./assets/css/main.css --minify",
+    "watch:tw": "npx tailwindcss -i ./assets/css/unprocessed_main.css -o ./assets/css/main.css --watch",
+    "watch:hugo": "hugo server",
+    "build": "hugo --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "@tailwindcss/typography": "^0.5.19",
+    "concurrently": "^8.2.2",
+    "daisyui": "^5.4.7",
+    "tailwindcss": "^4.1.17"
+  }
+}

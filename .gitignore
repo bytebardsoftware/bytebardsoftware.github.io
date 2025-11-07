@@ -28,3 +28,6 @@ resources/_gen
 
 # VSCode plugin for Hugo
 .frontmatter
+
+# Node modules for tailwind and daisy
+node_modules

@@ -1,8 +1,30 @@
 {{ define "main" }}
+<div class="prose xl:prose-xl mb-8">
   <h1>{{ .Title }}</h1>
   {{ .Content }}
+</div>
+
+<div class="flex flex-col gap-6">
   {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
+  <div class="card bg-base-100 shadow-xl border border-base-300">
+    <div class="card-body">
+      <h2 class="card-title">
+        <a href="{{ .RelPermalink }}" class="hover:underline">{{ .LinkTitle }}</a>
+      </h2>
+      <p class="text text-base-content/80">{{ .Date.Format "January 2, 2006" }}</p>
+      {{ with .Params.tags }}
+      <div class="flex flex-wrap gap-2 mt-2">
+        {{ range . }}
+        <span class="badge badge-outline badge-sm">{{ . }}</span>
+        {{ end }}
+      </div>
+      {{ end }}
+      <p class="text-2xl mt-4">{{ .Summary }}</p>
+      <div class="card-actions justify-end mt-4">
+        <a href="{{ .RelPermalink }}" class="btn btn-primary btn-sm">Read More</a>
+      </div>
+    </div>
+  </div>
   {{ end }}
+</div>
 {{ end }}

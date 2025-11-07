@@ -1,7 +1,6 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+  <!-- This is content/_index.md -->
+   <div class="prose xl:prose-xl">
+    {{ .Content }}
+   </div>
 {{ end }}
