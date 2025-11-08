@@ -1,12 +1,12 @@
 {{ define "main" }}
-<div class="prose xl:prose-xl mb-8">
+<div class="prose mb-8">
   <h1>{{ .Title }}</h1>
   {{ .Content }}
 </div>
 
 <div class="flex flex-col gap-6">
   {{ range .Pages }}
-  <div class="card bg-base-100 shadow-xl border border-base-300">
+  <div class="card bg-base-100 shadow-xl border-base-300 border-4">
     <div class="card-body">
       <h2 class="card-title">
         <a href="{{ .RelPermalink }}" class="hover:underline">{{ .LinkTitle }}</a>
