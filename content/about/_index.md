@@ -1,19 +1,10 @@
 +++
-title = 'About Me'
+title = ''
 date = 2023-01-01T08:30:00-07:00
 draft = false
 +++
 
-{{< figure
-src="/img/profile-image.jpeg"
-alt="image"
-height="200"
-width="200"
->}}
-
-Hi! I'm Borja.
-
-# I Help Development Teams Build Rock-Solid Processes to Ship More, Faster
+{{< about/hero >}}
 
 I'm obsessed with Developer Productivity and build systems. I want to help you and your team build the tools and processes it needs to ship more, faster, and with more joy.
 
