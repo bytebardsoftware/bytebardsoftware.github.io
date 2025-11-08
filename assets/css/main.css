@@ -16,6 +16,9 @@
     --text-3xl: 1.875rem;
     --text-3xl--line-height: calc(2.25 / 1.875);
     --font-weight-bold: 700;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -1971,6 +1974,11 @@
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
+  .btn-block {
+    @layer daisyui.modifier {
+      width: 100%;
+    }
+  }
   .w-6 {
     width: calc(var(--spacing) * 6);
   }
@@ -2094,6 +2102,10 @@
   .text-success {
     color: var(--color-success);
   }
+  .shadow {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
   .shadow-xl {
     --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -2123,6 +2135,12 @@
       --fontsize: 0.75rem;
       --btn-p: 0.75rem;
       --size: calc(var(--size-field, 0.25rem) * 8);
+    }
+  }
+  .btn-accent {
+    @layer daisyui.modifier.color {
+      --btn-color: var(--color-accent);
+      --btn-fg: var(--color-accent-content);
     }
   }
   .btn-primary {
@@ -2347,6 +2365,21 @@ body {
   padding-left: 1rem;
   padding-right: 1rem;
   max-width: 40rem;
+}
+article {
+  padding: 2rem;
+  transition: all 0.1s ease-in-out;
+  border: var(--border) solid var(--color-primary);
+}
+.shadow {
+  --shadow-offset: 5px;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-primary);
+}
+article.pop:hover {
+  transform: translate3d(-3px, -3px, 0);
+}
+.pop.shadow:hover {
+  box-shadow: calc(var(--shadow-offset) * 2) calc(var(--shadow-offset) * 2) 0px var(--color-primary);
 }
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {

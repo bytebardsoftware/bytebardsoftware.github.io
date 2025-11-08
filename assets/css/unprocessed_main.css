@@ -45,3 +45,22 @@ body {
   padding-right: 1rem;
   max-width: 40rem;
 }
+
+article {
+    padding: 2rem;
+    transition: all 0.1s ease-in-out;
+    border: var(--border) solid var(--color-primary);
+}
+
+.shadow {
+    --shadow-offset: 5px;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-primary);
+}
+
+article.pop:hover {
+    transform: translate3d(-3px, -3px, 0);
+}
+
+.pop.shadow:hover {
+    box-shadow: calc(var(--shadow-offset) * 2) calc(var(--shadow-offset) * 2) 0px var(--color-primary);
+}
