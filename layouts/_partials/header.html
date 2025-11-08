@@ -1,0 +1,8 @@
+<div class="flex flex-col items-center p-5 mt-10 mb-5 border-b border-base-300">
+    <div class="prose">
+        <h1>{{ site.Title }}</h1>
+    </div>
+    <div class="mt-4">
+        {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+    </div>
+</div>

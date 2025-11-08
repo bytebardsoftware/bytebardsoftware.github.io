@@ -1,0 +1,165 @@
+<article
+  class="card bg-base-100 shadow-xl border border-base-300 max-w-2xl mx-auto"
+>
+  <div class="card-body" id="contact-form-container">
+    <h2 class="card-title text-3xl mb-4">Get In Touch</h2>
+    <form
+      id="contact-us-form"
+      name="contact"
+      method="POST"
+      action="https://automations.bardic.tools/webhook/bytebard-register-interest"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+
+      <!-- Honeypot field for spam protection -->
+      <p class="hidden">
+        <label>
+          Don't fill this out if you're human: <input name="bot-field" />
+        </label>
+      </p>
+
+      <div class="form-control w-full mb-4">
+        <label class="label">
+          <span class="label-text">Name</span>
+        </label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Your name"
+          class="input input-bordered w-full"
+          required
+        />
+      </div>
+
+      <div class="form-control w-full mb-4">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          class="input input-bordered w-full"
+          required
+        />
+      </div>
+
+      <div class="form-control w-full mb-4">
+        <label class="label">
+          <span class="label-text">Phone Number</span>
+        </label>
+        <input
+          type="tel"
+          name="phone"
+          id="phone"
+          placeholder="+1 (555) 123-4567"
+          class="input input-bordered w-full"
+          required
+        />
+      </div>
+
+      <div class="form-control w-full mb-4">
+        <label class="label" for="message">
+          <span class="label-text">Your Problem</span>
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          class="textarea textarea-bordered w-full h-32"
+          required
+        ></textarea>
+      </div>
+
+      <div class="card-actions justify-end mt-4">
+        <button type="submit" class="btn btn-primary" id="submit-btn">
+          Fix My Bazel Problems
+        </button>
+      </div>
+    </form>
+  </div>
+</article>
+
+<script>
+function installContactFormHandler() {
+    const form = document.getElementById('contact-us-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const container = document.getElementById('contact-form-container');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log('Prevented default in contact form.');
+
+        // Show loading state
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+
+        const formData = new FormData(form);
+        const jsonData = JSON.stringify(Object.fromEntries(formData));
+
+        fetch(form.action, {
+            method: form.method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Form submitted successfully');
+                // Show success state
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Thank you!</h3>
+                        <p class="text-lg">We'll get back to you soon!</p>
+                    </div>
+                `;
+            } else {
+                console.error('Error submitting form');
+                // Show error state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+
+                // Show error alert
+                const existingAlert = form.querySelector('.alert-error');
+                if (!existingAlert) {
+                    const errorAlert = document.createElement('div');
+                    errorAlert.className = 'alert alert-error mb-4';
+                    errorAlert.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Error submitting form. Please try again.</span>
+                    `;
+                    form.insertBefore(errorAlert, form.firstChild);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+
+            // Show error alert
+            const existingAlert = form.querySelector('.alert-error');
+            if (!existingAlert) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-error mb-4';
+                errorAlert.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Network error. Please check your connection and try again.</span>
+                `;
+                form.insertBefore(errorAlert, form.firstChild);
+            }
+        });
+    });
+    console.log('Event handler registered.');
+}
+installContactFormHandler();
+</script>
