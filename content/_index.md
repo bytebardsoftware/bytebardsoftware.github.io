@@ -29,8 +29,8 @@ As a result, we can help you with the trickiest bits of Bazel such as:
 
 ### Bazel Migrations
 
-Bazel migrations are scary. It's usually a trapdoor decision, that you have to commit to up-front, that your engineers may or may not be happy with.
-How do you fit the quirks of your code into Bazel? How do you make sure that what you build is correct once you switch? 
+Bazel migrations are scary. It's usually a big decision, that you have to commit to up-front, that your engineers may or may not be happy with.
+How do you fit the quirks of your code into Bazel? How do you make sure that, once you switch, the code you deploy is correct? 
 How do you make sure engineers can stay productive during and after the transition?
 
 It can (and often does) get messy.
