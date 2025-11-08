@@ -1,0 +1,17 @@
+{{- /* Get arguments. */}}
+{{- $class := or (.Get "class") "" }}
+{{- $id := or (.Get "id") "" }}
+{{- $cta := or (.Get "cta") "" }}
+
+<article
+  {{- with $class }} class="{{ . }} shadow mt-5 mb-5" {{- end }}
+  {{- with $id }} id="{{ . }}" {{- end }}
+>
+  {{ .Inner | .Page.RenderString (dict "display" "block") -}}
+  {{- with $cta }}
+    <div class="card-actions justify-end mt-4">
+        <a href="/enquire" class="btn btn-block btn-outline btn-accent">{{ . }}</a>
+    </div>
+  {{- end }}
+</article>
+
