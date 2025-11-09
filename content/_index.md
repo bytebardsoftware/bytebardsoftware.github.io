@@ -68,3 +68,22 @@ That one dependency that insists it needs _this version_ of OpenSSL.
 We've got years of experience walking this last, painful 5% and integrating it into Bazel, the right way.
 {{< /card >}}
 
+---
+
+## Our Mission
+
+We believe building world-class software quickly should be much more **common**, and much more **joyful**.
+We also believe that doing the small things right is the key to achieving that outcome.
+
+A 10% improvement in one developer's output means tens of thousands of dollars a year in saved expenses. A 10% increase in their joy is even better, because engaged teams produce much higher-quality results (and are happier, which is a win-win). Scale that to a large organization, compounded over time, and a 10% improvement is easily worth seven figures.
+
+Here's the thing. 10% improvements in tooling and processes are not only common, but blindingly obvious if you know where to look.
+Teams usually know what the rough edges are around their development experience.
+
+Sanding them off is not only worth it, but often the best decision one can do for the business. Hence, our mission:
+
+> We cure papercuts at scale.
+
+Have papercuts that you'd like cured? Parts of your developer experience that could be better but you just don't have the time to get a degree from the University of Bazel?
+
+{{< contact-form >}}
