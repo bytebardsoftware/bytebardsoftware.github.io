@@ -1,4 +1,5 @@
 /*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -18,10 +19,7 @@
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
     --font-weight-bold: 700;
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --aspect-video: 16 / 9;
-    --default-transition-duration: 150ms;
-    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -2050,17 +2048,11 @@
   .w-40 {
     width: calc(var(--spacing) * 40);
   }
-  .w-60 {
-    width: calc(var(--spacing) * 60);
-  }
   .w-full {
     width: 100%;
   }
   .max-w-2xl {
     max-width: var(--container-2xl);
-  }
-  .max-w-60 {
-    max-width: calc(var(--spacing) * 60);
   }
   .shrink-0 {
     flex-shrink: 0;
@@ -2268,7 +2260,7 @@
   }
 }
 body {
-  font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace;
+  font-family: "Space Grotesk", sans-serif;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem;
