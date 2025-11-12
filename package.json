@@ -7,8 +7,8 @@
     "start": "concurrently npm:watch:*",
     "build-tw": "npx tailwindcss -i ./assets/css/unprocessed_main.css -o ./assets/css/main.css --minify",
     "watch:tw": "npx tailwindcss -i ./assets/css/unprocessed_main.css -o ./assets/css/main.css --watch",
-    "watch:hugo": "hugo server",
-    "build": "hugo --minify"
+    "watch:hugo": "npm exec hugo server -D",
+    "build": "npm run build-tw && npm exec hugo --minify"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +18,11 @@
     "@tailwindcss/typography": "^0.5.19",
     "concurrently": "^8.2.2",
     "daisyui": "^5.4.7",
+    "hugo-bin": "^0.149.2",
     "tailwindcss": "^4.1.17"
+  },
+  "hugo-bin": {
+    "buildTags": "extended",
+    "version": "0.152.2"
   }
 }
