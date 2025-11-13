@@ -19,7 +19,7 @@ That is, until I tackled `java_exports`.
  
 # The Problem
 
-Today we're going to talk about [bazel-contrib/rules_jvm#344](https://github.com/bazel-contrib/rules_jvm/issues/344): **Support `java_export` in the Gazelle plugin**, a feature I implemented with sponsorship from the Bazel Rules Authors SIG[^1].
+Today we're going to talk about [bazel-contrib/rules_jvm#344](https://github.com/bazel-contrib/rules_jvm/issues/344): **Support `java_export` in the Gazelle plugin**, a feature I implemented with sponsorship from the Bazel Rules Authors SIG.
 
 On the surface, it seems like a simple enough task. `rules_jvm_external` has this rule, `java_export`, that represents roughly "an artifact that you're intending to publish". For Bazel purposes, this translates to "A jar + its maven coordinates + sometimes some resources"[^3]
 
@@ -78,7 +78,7 @@ A -- Exports Class --> Aclass["foo.bar.A"]
 If `java_library(B)` would like to import `foo.bar.A`, should it depend on `X`, or `Y`?
 
 
-After some more chatting, trying out different ideas, and bringing in Steve, the expert on the Gazelle portion of `rules_jvm`, we decided on the pragmatic option: [Just error](https://github.com/bazel-contrib/rules_jvm/pull/347/files#diff-2564fe0d41f8caa1ece01e294fa68ad6bb94df8255f9b6aa3ce7babba38af718)[^4]
+After some more chatting, trying out different ideas, and bringing in Steve, the expert on the Gazelle portion of `rules_jvm`, we decided on the pragmatic option: [Just error out](https://github.com/bazel-contrib/rules_jvm/pull/347/files#diff-2564fe0d41f8caa1ece01e294fa68ad6bb94df8255f9b6aa3ce7babba38af718)[^4]
 
 As a fan of Rust, I approve of this strictness.
 
@@ -144,7 +144,7 @@ That's it! [A few thousands of lines of Go code later](https://github.com/bazel-
 
 It seems that every few months a graph theory problem comes up and makes me bust out the whiteboard. This was one of those problems.
 
-As a result of the work, Gazelle now supports `java_exports`. This feature is not free (you can imagine that building a whole separate index is not cheap), and has semantic implications for the a repository, so it's opt-in hidden behind [a global directive](https://github.com/bazel-contrib/rules_jvm/blob/main/java/gazelle/README.md#directives).
+As a result of the work, Gazelle now supports `java_exports`. This support is not free (you can imagine that building a whole separate index is not cheap), and has semantic implications for the repository, so we used [a global directive](https://github.com/bazel-contrib/rules_jvm/blob/main/java/gazelle/README.md#directives) to make the feature opt-in.
 
 However, it does bring some projects (most notably [Selenium](https://www.selenium.dev/)) significantly closer to being able to use Gazelle 🎉
 
@@ -153,8 +153,6 @@ Thank you Simon and Steve for bouncing ideas, and thank you to the [Bazel Rules 
 -- Borja
 
 PS: I'm always happy to chat about your build! If you'd like help with your Bazel problems, [get in touch](/enquire).
-
-[^1]: Pics or didn't happen: [Go to Open Collective](https://opencollective.com/bazel-rules-authors-sig/expenses/255682)
 
 [^2]: Of course, I only know about this from aquaintances, that would never have happened to me. Never, ever. No, sir.
 
