@@ -23,21 +23,23 @@ Today we're going to talk about [bazel-contrib/rules_jvm#344](https://github.com
 
 On the surface, it seems like a simple enough task. `rules_jvm_external` has this rule, `java_export`, that represents roughly "an artifact that you're intending to publish". For Bazel purposes, this translates to "A jar + its maven coordinates + sometimes some resources"[^3]
 
-Most large Java repositories export more than one artifact, and therefore may have one or more `java_export` targets bundling that artifact. Think, for instance, of [all the artifacts under `io-netty`](https://central.sonatype.com/namespace/io.netty). If they were in a Bazel monorepo, each one of those would be a `java_export`.
+Most large Java repositories publish more than one artifact, and therefore may have one or more `java_export` targets bundling that artifact. Think, for instance, of [all the artifacts under `io-netty`](https://central.sonatype.com/namespace/io.netty). If they were in a Bazel monorepo, each one of those would be a `java_export`.
 
-Now, the problem: Before #344, Gazelle would ignore `java_export` targets, and happily add dependencies from targets _outside_ a `java_export` into a target _inside_ a `java_export`. This led to all sorts of subtly undesirable behavior. For instance, it's possible that the same class would end up in two different exported packages, causing all sorts of classpath precedence hilarity.
+Before #344, Gazelle would ignore `java_export` targets, which was a problem. For instance, it was possible that the same class would end up in two different published packages if two `java_exports` depended (transitively) on the same `java_library`. You don't want to be debugging the classpath issues caused by this.
 
-So the task was to teach Gazelle to handle `java_export`s in a sane way.
+So the task was to teach Gazelle to handle `java_export`s in a reasonable way.
 
-Now, "in a sane way" is not a very technical term, so we're going to define a couple of concepts to explain the semantics we want:
+Now, "reasonable" is not a very technical term, so we're going to define a couple of concepts to explain the semantics we want:
 
 - We're going to be dealing with `java_library` targets. Whenever I say "target", but not which kind, assume it's a `java_library`.
 - We say that target `A` is **inside**  `java_export` `X` if `A` is in the transitive closure of dependencies of `X`.
 - Conversely, `A` is **outside** `X` if it is not in the transitive closure of dependencies.
+- We're going to say a target **exports** a Java package if that package is accessible to Bazel by depending on that target.
 
 With this, we re-define the problem as:
 
-> If a target _outside_ of a `java_export` would depend on a class _inside_ of a `java_export`, Gazelle should generate a dependency to the `java_export`, instead of whatever target exported the needed class.
+> If a target _outside_ of a `java_export` would depend on a class _inside_ of a `java_export`, Gazelle should generate a dependency to the `java_export`, instead of whatever target originally _exported_ the needed class.
+
 ## Feeling the Edges
 
 Whenever we're trying to generate BUILD files, it pays off to be _extremely_ clear about the semantics we're looking for before we start messing around in Gazelle. Otherwise, we run the risk of thinking that something is working, and then forgetting the bajillion edge cases that will invalidate our solution[^2].
@@ -64,7 +66,7 @@ Now imagine that we have a `java_library(B)` that would like to import `foo.bar.
 After consulting with [Simon](https://github.com/shs96c) (one of the maintainers of `rules_jvm` and the person who requested the feature in the first place), we decided that the answer is `Y`: A target should depend on the most general `java_export` available.
 ### Sharp Edge 2: Manually maintained `java_exports`
 
-`java_export` targets are usually maintained by hand, because how to partition your classes into packages is a design decision which depends on your domain, so it's very hard to automate. Sometimes, the maintainers of a repository decide that they _would_ like the same class to exist in different `java_exports`. I'm sure there are good reasons for this, but four our purposes it leaves us with this case:
+`java_export` targets are usually maintained by hand, because how to partition your classes into publishable artifacts is a design decision which depends on your domain, so it's very hard to automate. Sometimes, the maintainers of a repository decide that they _would_ like the same class to exist in different `java_exports`. I'm sure there are good reasons for this, but for our purposes it leaves us with this case:
 
 ```mermaid
 flowchart LR
@@ -87,13 +89,13 @@ Imagine the following setup:
 ```mermaid
 flowchart LR
 
-subgraph s3["./bar"]
+subgraph s3["//bar"]
 
 A["java_library(A)"]
 
 end
 
-subgraph s2["./foo"]
+subgraph s2["//foo"]
 
 X["java_export(X)"]
 
@@ -102,12 +104,13 @@ end
 X -- Depends On --> A
 ```
 
-It is possible for a `java_export` to export `java_library` targets that are _not_ in a subdirectory. This has implications for Gazelle, since its traversal order dictates when it has access to what information. This will become extremely relevant in [the following sections](#why-was-this-a-problem-for-gazelle).
+It is possible for a `java_export` to export symbols in `java_library` targets that are _not_ in a subdirectory. This has implications for Gazelle, since its traversal order dictates when it has access to what information. This will become extremely relevant in [the following sections](#why-was-this-a-problem-for-gazelle).
+
 # The Solution
 
 We have the problem. We have fleshed out its gnarly edge cases. Let's solve it.
 
-We need to hook into `rules_jvm`'s Gazelle plugin. Specifically, we need to modify the `Resolver` (TODO Link). The main role of the `Resolver` is to map Java packages to Bazel dependencies. In other words: Gazelle asks "I'm about to generate a `java_library`. I know it needs to import the Java package `com.foo.bar`. What Bazel target should it depend on?" and `Resolve` answers with a list of packages. In the `rules_jvm` Gazelle plugin, this question is answered by [`resolveSinglePackage()`](https://github.com/bazel-contrib/rules_jvm/blob/81a007d2009e2e484210f17b88006469dc474adf/java/gazelle/resolve.go#L209).
+We need to hook into `rules_jvm`'s Gazelle plugin. Specifically, we need to modify the `Resolver`. The main role of the `Resolver` is to map Java packages to Bazel dependencies. In other words: Gazelle asks "I'm about to generate a `java_library`. I know it needs to import the Java package `com.foo.bar`. What Bazel target should it depend on?" and `Resolve` answers with a list of packages. In the `rules_jvm` Gazelle plugin, this question is answered by [`resolveSinglePackage()`](https://github.com/bazel-contrib/rules_jvm/blob/81a007d2009e2e484210f17b88006469dc474adf/java/gazelle/resolve.go#L209).
 
 We need to modify that function so that, if there _is_ a `java_export` that exports the required package and is visible by the target we're trying to create, we should depend on that and exit the function early[^5].
 
@@ -139,29 +142,29 @@ That's it! [A few thousands of lines of Go code later](https://github.com/bazel-
 
 # The Outcome
 
-This project was quite interesting to work on. It seems that every few months an interesting graph theory problem comes up and makes me bust out the whiteboard. This was one of those problems.
+It seems that every few months a graph theory problem comes up and makes me bust out the whiteboard. This was one of those problems.
 
-As a result of the work, Gazelle now supports `java_exports`. This feature is not free (you can imagine that building a whole separate index is not cheap), and has semantic implications for the a repository, so it's opt-in, hidden behind [a global directive](https://github.com/bazel-contrib/rules_jvm/blob/main/java/gazelle/README.md#directives).
+As a result of the work, Gazelle now supports `java_exports`. This feature is not free (you can imagine that building a whole separate index is not cheap), and has semantic implications for the a repository, so it's opt-in hidden behind [a global directive](https://github.com/bazel-contrib/rules_jvm/blob/main/java/gazelle/README.md#directives).
 
 However, it does bring some projects (most notably [Selenium](https://www.selenium.dev/)) significantly closer to being able to use Gazelle 🎉
 
-Thank you Simon and Steve for helping me bounce ideas, and than you to the [Bazel Rules Author SIG](https://opencollective.com/bazel-rules-authors-sig) for funding this work. If you'd like rulesets to be better, please consider donating.
+Thank you Simon and Steve for bouncing ideas, and thank you to the [Bazel Rules Author SIG](https://opencollective.com/bazel-rules-authors-sig) for funding this work.
 
 -- Borja
 
-PS: I'm always happy to chat about your build! If you'd like help with your build, please [get in touch](/enquire).
+PS: I'm always happy to chat about your build! If you'd like help with your Bazel problems, [get in touch](/enquire).
 
-[^1]: Pics or didn't happen: https://opencollective.com/bazel-rules-authors-sig/expenses/255682
+[^1]: Pics or didn't happen: [Go to Open Collective](https://opencollective.com/bazel-rules-authors-sig/expenses/255682)
 
 [^2]: Of course, I only know about this from aquaintances, that would never have happened to me. Never, ever. No, sir.
 
-[^3]: If you're interested in the non-simplified version: https://github.com/bazel-contrib/rules_jvm_external/blob/8ecfd36e4db64257ba2de5c0fb9000dbb4f12c0d/docs/api.md#java_export
+[^3]: If you're interested in the non-simplified version: [Go to GitHub](https://github.com/bazel-contrib/rules_jvm_external/blob/8ecfd36e4db64257ba2de5c0fb9000dbb4f12c0d/docs/api.md#java_export)
 
 [^4]: One of the reasons it's hard to produce correct results in this case is about traversal order. Gazelle processes directories in parallel, so in the case above it's impossible to tell whether X or Y will be visited first. Yes, we can work around this, but when I tried it the result were 2 or 3x more complicated semantics to support a use case that was dubious to begin with.
 
-[^5]: That's exactly what we did: https://github.com/bazel-contrib/rules_jvm/blob/81a007d2009e2e484210f17b88006469dc474adf/java/gazelle/resolve.go#L218-L228
+[^5]: That's exactly what we did: [Go to GitHub](https://github.com/bazel-contrib/rules_jvm/blob/81a007d2009e2e484210f17b88006469dc474adf/java/gazelle/resolve.go#L218-L228)
 
-[^6]: A fantastic, more complete explanation here: https://blog.kartones.net/post/gazelle-workspace-traversal-and-extension-handlers/
+[^6]: A fantastic, more complete explanation here: [kartones.net](https://blog.kartones.net/post/gazelle-workspace-traversal-and-extension-handlers/)
 
 [^7]: And what source files do they have, and what packages do they export?
 
