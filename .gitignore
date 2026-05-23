@@ -31,3 +31,6 @@ resources/_gen
 
 # Node modules for tailwind and daisy
 node_modules
+
+# .idea
+.idea
