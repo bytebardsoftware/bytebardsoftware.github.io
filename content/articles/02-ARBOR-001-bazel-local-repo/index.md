@@ -24,7 +24,7 @@ _This background is important to understand the tradeoffs that led to this desig
 
 The SONiC project is fascinating -- it's a complex set of tools and services that get loaded into high-frequency network switches -- you know, the ones Google, Meta, Microsoft and all the other hyper-scalers use to route traffic inside their massive data-centers. It's an amazing project, it shows how a huge, disjoint industry of competitors can come together to cooperate on a problem. It has also grown a lot in different directions, with contributions from dozens of companies across decades.
 
-Through my relationship with Aspect Build, I found myself working on modernizing the Make-based, homegrown build system of the SONiC project into Bazel. You can read more about our work in [their blog](https://blog.aspect.build/bazel-for-sonic), or watch my recent presentation to the SONiC community:
+Aspect Build brought me in as part of their team modernizing SONiC's Make-based, homegrown build system of the SONiC project into Bazel. You can read more about our work in [their blog](https://blog.aspect.build/bazel-for-sonic), or watch my recent presentation to the SONiC community:
 
 ![](https://www.youtube.com/watch?v=uSKCNDWuXjc)
 
@@ -132,7 +132,7 @@ modules/rules_go/0.60.0.patched
 ├── patches
 │   ├── 0001_add_extra_taco_sauce.patch
 │   ├── 0002_even_more_taco_sauce.patch
-│   └── 0003_despond_the_combobulators.patch
+│   └── 0003_fix_arm64_linkage.patch
 └── source.json
 ```
 Anyone in your first party dependencies that depends on `rules_go` should then depend on the patched version:
@@ -143,7 +143,7 @@ Anyone in your first party dependencies that depends on `rules_go` should then d
 bazel_dep(name="rules_go", version="0.60.0.patched")
 ```
 
-It's easy to see how this can be enforced automatically by pre-commit hooks or [AXL](https://github.com/aspect-extensions) rules, so I'll leave that as an exercise to the reader.
+It's easy to see how this can be enforced automatically by pre-commit hooks or [AXL](https://github.com/aspect-extensions) rules. A Bash three-liner that greps `MODULE.bazel` files should cover 90% of the cases anyway. You can make the other 10% fail loudly if you yank old versions as you publish new ones.
 
 {{< callout title="SONiC Example" >}}
 That example above is taken almost verbatim from SONiC's [`rules_go` entry](https://github.com/thesayyn/sonic-buildimage/tree/master/tools/bazel/registry/modules/rules_go). We stored patches that we mean to upstream, but either haven't merged yet, or haven't been released yet.
