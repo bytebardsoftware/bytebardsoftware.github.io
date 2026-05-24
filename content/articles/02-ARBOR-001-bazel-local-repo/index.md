@@ -1,11 +1,11 @@
 +++
-title = 'ARBOR 001 - The Bazel Local Registry Pattern for Large Monorepo-shaped Polyrepos'
+title = 'ARBOR 001 - The Bazel Local Registry Pattern for Large Polyrepos That Want to Behave Like Monorepos'
 date = 2026-05-23T08:30:00-07:00
 draft = false
 tags = ["Bazel", "Monorepos", "Legacy", "ARBOR"]
 +++
 
-_Short for "Approaches to Refactoring Big Old Repositories", the ARBOR series covers the techniques I've found and implemented when working on large project repositories, typically during a migration into Bazel. I do not claim these techniques are Bazel-idiomatic, but rather "as idiomatic as possible while working with the unique constraints of particular legacy project". If your project has a similar set of constraints, maybe they'll be useful!_
+_The **ARBOR** series (short for **"Approaches to Refactoring Big Old Repositories"**) covers the techniques I've found and implemented when working on large project repositories, typically during a migration into Bazel. I do not claim these techniques are Bazel-idiomatic, but rather "as idiomatic as possible while working with the unique constraints of individual legacy projects". If your project has a similar set of constraints, maybe they'll be useful!_
 
 In this article, I'll show you how a custom Bazel registry solved a tricky dependency problem in a multi-million line polyrepo, and why I reached for it instead of the standard override approach.
 
@@ -20,27 +20,27 @@ Anyway, here's the story:
 
 # Setting The Stage
 
-_This background is important to understand the tradeoffs that led to this design. But if you know it already, or just don't care, you can skip to the implementation by clicking here._
+_This background is important to understand the tradeoffs that led to this design. But if you know it already, or just don't care, you can skip to the implementation by [clicking here](#the-bazel-local-registry-an-alternative-to-the-bazel-central-registry)._
 
-The SONiC project is fascinating -- it's a complex set of tools and services that get loaded into high-frequency network switches -- you know, the ones Google, Meta, Microsoft and all the other hyper-scalers use to route traffic inside their massive data-centers. It's an amazing project, it shows how a huge, disjoint industry of competitors can come together to cooperate on a problem. It has also grown a lot in different directions, with contributions from dozens of companies across decades.
+The SONiC project[^3] is fascinating -- it's a complex set of tools and services that get loaded into high-frequency network switches -- you know, the ones Google, Meta, Microsoft and all the other hyper-scalers use to route traffic inside their massive data-centers. It's an amazing project. It shows how a huge, disjoint industry of competitors can come together to cooperate on a problem. It has also grown a lot in different directions, with contributions from dozens of companies across decades.
 
-Aspect Build brought me in as part of their team modernizing SONiC's Make-based, homegrown build system of the SONiC project into Bazel. You can read more about our work in [their blog](https://blog.aspect.build/bazel-for-sonic), or watch my recent presentation to the SONiC community:
+Aspect Build brought me in as part of their team modernizing SONiC's Make-based, homegrown build system into Bazel. You can read more about our work in their blog, or watch my recent presentation to the SONiC community:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/uSKCNDWuXjc?si=RJ7jYVSdTh-TwHGY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## The Unique Constraints of the SONiC Build System
 
-The SONiC build system is unique and wonderful because it has to accommodate a wide array of unusual architectures. This presents a lot of Bazel challenges, and required a lot of rule development work. In this article, we will ignore all of that[^1].
+The SONiC build system is unique and wonderful because it has to accommodate a wide array of unusual target architectures. This presents a lot of Bazel challenges, and required a lot of rule development work. In this article, we will ignore all of that[^1].
 
 Instead, we're going to focus on the outer shape of the project, and how its repositories relate to one another:
 
 SONiC is made up of **components**. For our purposes, a component is "a service or tool that will be deployed to the switch in a Docker container". A **component** can come from different **sources**. Typically, these sources will be either a (possibly patched) version of a third-party open-source utility (e.g. Redis), or a first-party component in its own repository (e.g. https://github.com/sonic-net/sonic-swss). 
 
-There is a central repository,[ **sonic-buildimage**](https://github.com/sonic-net/sonic-buildimage), which (through a hand-written Make-based build system) imports these **sources** and bundles them into Docker images ready to be deployed to switches. First-party code is imported via git submodules ([example](https://github.com/sonic-net/sonic-buildimage/tree/master/src)), whereas third party code is downloaded from a Debian repository before being patched and recompiled ([example](https://github.com/sonic-net/sonic-buildimage/blob/master/src/libnl3/Makefile)).
+There is a central repository, [**sonic-buildimage**](https://github.com/sonic-net/sonic-buildimage), which (through a hand-written Make-based build system) imports these **sources** and bundles them into Docker images ready to be deployed to switches. First-party code is imported via git submodules ([example](https://github.com/sonic-net/sonic-buildimage/tree/master/src)), whereas third party code is downloaded from a Debian repository before being patched and recompiled ([example](https://github.com/sonic-net/sonic-buildimage/blob/master/src/libnl3/Makefile)).
 
 We're always expected to build deployable artifacts from the **sonic-buildimage** repository. However, we do want every component to be buildable on its own so that we can iterate on it quickly.
 
-So far, this is easy to model in Bazel, right?
+So far, this is easy to model in Bazel.
 
 If we assume that we're always going to check out **sonic-buildimage** with all its submodules, we can more or less treat it like a monorepo: For first party components, we import them via a `git_override` or `local_path_override`. Job done.
 
@@ -48,7 +48,7 @@ Third party components are a bit trickier: We do have to migrate them to Bazel f
 
 Well... not quite.
 
-Turns out, first party components can depend on each other. And neither `git_override` nor `local_path_override` are transitive. So, if `sonic-swss` depends on `sonic-swss-common`, which depends on `sonic-buildimage/src/libnl3`, then `sonic-swss` _had_ to have either a `git_override` or a `local_path_override` for `sonic-buildimage/src/libnl3`.
+Turns out, first party components can depend on each other. Neither `git_override` nor `local_path_override` are transitive so, if `sonic-swss` depends on `sonic-swss-common`, which depends on `sonic-buildimage/src/libnl3`, then `sonic-swss` _had_ to have either a `git_override` or a `local_path_override` for `sonic-buildimage/src/libnl3`.
 
 Oops.
 
@@ -59,7 +59,6 @@ Even worse: most SONiC users run heavily customized setups. Almost everyone has 
 Enter, the Bazel Local Registry.
 
 # The Bazel Local Registry: An alternative to the Bazel Central Registry
-
 
 At its core, the idea is simple: we want proper dependency resolution across Bazel modules (i.e. to use `bazel_dep`), but our code is not really useful to others, so it doesn't belong in the Bazel Central Registry, the public registry everyone uses.
 
@@ -97,9 +96,10 @@ Now we're ready to start adding Bazel modules for our different components. In g
 
 ### Iterate Quickly on First Party Dependencies
 
-This only works if your dependencies are checked out at a stable path, ideally relative to the `module_base_path` we mentioned above. In those cases, you can create a Bazel package that will point to the local directory where the dependency will live. For that, you create a version of the dependency as normal, but then set its `type` to be `local_path`, as per [the documentation](https://bazel.build/external/registry#source-json):
+This only works if your dependencies are checked out at a stable path, ideally relative to the `module_base_path` we mentioned above. In those cases, you can create a Bazel package that will point to the local directory where the dependency will live. For that, you create a version of the dependency as normal, but then set its `type` in `source.json` to be `local_path`, as per [the documentation](https://bazel.build/external/registry#source-json):
 
 ```json
+// source.json
 {
   "type": "local_path",
   "path": "path/under/module_base_path"
@@ -135,7 +135,8 @@ modules/rules_go/0.60.0.patched
 │   └── 0003_fix_arm64_linkage.patch
 └── source.json
 ```
-Anyone in your first party dependencies that depends on `rules_go` should then depend on the patched version:
+
+Anyone in your first party dependencies that depends on `rules_go` should then depend on the patched version[^4]:
 
 ```starlark
 # my_dep/MODULE.bazel
@@ -157,7 +158,7 @@ On the bright side, the Bazel Local Registry pattern is a great stepping stone f
 
 However, it also means that:
 - We lose some Bazel goodness. Because `local_path` modules are backed by `local_repository` repo rule, we have found that sometimes we had to run `bazel shutdown` to pick up changes to a local dep. I believe this is solvable, but I haven't solved it yet.
-- Individual components now depend on the repository with the Bazel registry. This is not a problem if your project is roughly monorepo-shaped (like SONiC), but the less you can rely on your checkout of the registry to be in sync with your components, the more painful your life will be. If this is your case, you may be better off avoiding `local_path` sources in your Bazel registry entirely, and just relying on traditional `archive` paths.
+- Individual components now depend on the repository with the Bazel registry. This is not a problem if your project is roughly monorepo-shaped (like SONiC), but that's not true for all projects. If you can't rely on the local registry to be to be in sync with your components, your life will be painful, and you may be better off avoiding `local_path` sources in your Bazel registry entirely, and just relying on traditional `archive` paths.
 
 # Conclusion
 
@@ -174,3 +175,7 @@ And if you just enjoyed the read or have a pattern you'd like to see in a future
 [^1]: See the [video](https://www.youtube.com/watch?v=uSKCNDWuXjc) or [read the article](https://blog.aspect.build/bazel-for-sonic) if you're interested in learning about them
 
 [^2]: See https://bazel.build/external/registry
+
+[^3]: Learn more at https://www.opencompute.org/community/sonic -- Always looking for contributors!
+
+[^4]: This `.patched` suffix is completely optional, you could absolutely override actual version of dependencies in the BCR. However, if we ever want to switch back to BCR versions, it may not be obvious from a code change.
