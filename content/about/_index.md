@@ -27,7 +27,6 @@ I have appeared in both BazelCon talks and Aspect Insights, Aspect's Bazel podca
 
 {{< youtube id="kxsidsOCcS8" >}}
 
-
 {{< youtube __Y53X0PAMk >}}
 
 {{< youtube uSKCNDWuXjc >}}
