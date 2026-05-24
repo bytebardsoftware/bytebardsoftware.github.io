@@ -26,7 +26,7 @@ The SONiC project is fascinating -- it's a complex set of tools and services tha
 
 Aspect Build brought me in as part of their team modernizing SONiC's Make-based, homegrown build system of the SONiC project into Bazel. You can read more about our work in [their blog](https://blog.aspect.build/bazel-for-sonic), or watch my recent presentation to the SONiC community:
 
-![](https://www.youtube.com/watch?v=uSKCNDWuXjc)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uSKCNDWuXjc?si=RJ7jYVSdTh-TwHGY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## The Unique Constraints of the SONiC Build System
 
