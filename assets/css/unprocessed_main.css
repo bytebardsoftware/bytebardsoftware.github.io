@@ -36,13 +36,16 @@
   --border: 2px;
   --depth: 0;
   --noise: 0;
-
 }
 
 
 :root {
   /* Width of a single article page on wide screens. Tweak this freely. */
   --article-width-desktop: 50rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -55,39 +58,39 @@ body {
 }
 
 article {
-    padding: 2rem;
-    transition: all 0.1s ease-in-out;
-    border: var(--border) solid var(--color-primary);
+  padding: 2rem;
+  transition: all 0.1s ease-in-out;
+  border: var(--border) solid var(--color-primary);
 }
 
 .shadow {
-    --shadow-offset: 5px;
-    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-primary);
+  --shadow-offset: 5px;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--color-primary);
 }
 
 article.pop:hover {
-    transform: translate3d(-3px, -3px, 0);
+  transform: translate3d(-3px, -3px, 0);
 }
 
 .pop.shadow:hover {
-    box-shadow: calc(var(--shadow-offset) * 2) calc(var(--shadow-offset) * 2) 0px var(--color-primary);
+  box-shadow: calc(var(--shadow-offset) * 2) calc(var(--shadow-offset) * 2) 0px var(--color-primary);
 }
 
 /* Single article pages break out wider than the 40rem body, centered on the
    viewport. Fluid: grows with the viewport up to --article-width-desktop.
    The header and footer stay in the narrow 40rem column. */
 article.single {
-    width: min(var(--article-width-desktop), calc(100vw - 2rem));
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+  width: min(var(--article-width-desktop), calc(100vw - 2rem));
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* On mobile, drop the frame (border + offset shadow) and tighten padding. */
 @media (max-width: 639px) {
-    article.single {
-        border: none;
-        box-shadow: none;
-        padding: 10px;
-    }
+  article.single {
+    border: none;
+    box-shadow: none;
+    padding: 5px;
+  }
 }

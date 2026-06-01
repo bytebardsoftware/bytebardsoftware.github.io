@@ -25,7 +25,11 @@ While most of my work is shut behind closed doors, I have also done substantial 
 
 I have appeared in both BazelCon talks and Aspect Insights, Aspect's Bazel podcast:
 
-{{< about/speaking >}}
+{{< youtube id="kxsidsOCcS8" >}}
+
+{{< youtube __Y53X0PAMk >}}
+
+{{< youtube uSKCNDWuXjc >}}
 
 ## My Mission
 
