@@ -19,7 +19,7 @@ After working with dozens of teams and organizations, and gathering hundreds of 
 
 So, a team of 2-4 people struggled to serve 20 engineers just as much as 100, whereas I've seen build teams of 8-10 serve comfortably companies of 1000 engineers. To put it in other words: Bazel's returns on investment are non-linear. Or even better, to put it visually:
 
-// TODO Graph
+![Bazel team size vs org size](./bazel-team-size-graph.png)
 
 This seems to indicate that, **unless you're ready to dedicate a minimum of 5-6 people exclusively to becoming Bazel experts, you're going to have a bad time**, and should probably stick to native tooling.
 
@@ -30,14 +30,6 @@ Now, why does this happen? To be honest, I don't have enough data to know for su
 - You get more customer support requests: Most engineers out there are very comfortable with native tools, and have no idea Bazel exists. When something breaks in `cargo`, their first instinct is usually to Google it, and it's likely they'll find a solution. When something breaks in Bazel, _even if they try to Google it_, chances are they'll end up just reaching out to your team.
 
 So, yeah. Unfortunately, I'd recommend your team be at least 6 tall to ride in the Bazel rollercoaster.
-
-{{< callout title="" >}}
-If you're in the middle of a Bazel migration, and you find yourself underwater and understaffed, there is hope!
-Hopefully this post is a good tool to secure more headcount.
-The important thing is to emphasize that Bazel's problems are the same size, no matter the size of your org. One or two more people can allow you to serve your organization now, _and_ scale the organization to thousands of engineers.
-
-I'm also more than happy to jump on a call and share some tools and techniques that I've seen work to secure more headcount. TODO CTA linking to enquire.
-{{< /callout >}}
 
 ## Your Project Is Mostly In One (Modern) Language, And Your Compile Times Are _Fine For Now_
 
@@ -77,7 +69,11 @@ Good question! Of course, I think Bazel is a wonderful tool... to solve a certai
 - Suffers from multi-hour CI builds routinely,
 - Needs a lot of language interoperability, or works on old languages without modern tooling support,
 
-Bazel _might_ be a good choice for you. It's still unclear without knowing the specific problems you're trying to solve with Bazel. If you'd like a second opinion, [get in touch](https://bytebard.software/enquire/?utm_campaign=not-need-bazel)! I'd be very happy to chat about your organization, your problems, and do my best to help you decide.
+Bazel _might_ be a good choice for you. It's still unclear without knowing the specific problems you're trying to solve with Bazel.
+
+If you'd like a second opinion, [get in touch](https://bytebard.software/enquire/?utm_campaign=not-need-bazel)! I'd be very happy to chat about your organization, your problems, and do my best to help you decide. And if you're in the middle of a Bazel migration and find yourself underwater and understaffed, there is hope! This post can be a good tool to secure more headcount.
+
+The important thing is to emphasize that Bazel's problems are the same size, no matter the size of your org. One or two more people can allow you to serve your organization now, _and_ scale the organization to thousands of engineers. You may want to create a slightly more professional-looking graph though.
 
 We'll return to our regularly scheduled tips and tricks soon.
 
