@@ -19,7 +19,7 @@ After working with dozens of teams and organizations, and gathering hundreds of 
 
 So, a team of 2-4 people struggled to serve 20 engineers just as much as 100, whereas I've seen build teams of 8-10 serve comfortably companies of 1000 engineers. To put it in other words: Bazel's returns on investment are non-linear. Or even better, to put it visually:
 
-![Bazel team size vs org size](./bazel-team-size-graph.png)
+![Bazel team size vs org size](./team-size-graph.png)
 
 This seems to indicate that, **unless you're ready to dedicate a minimum of 5-6 people exclusively to becoming Bazel experts, you're going to have a bad time**, and should probably stick to native tooling.
 
