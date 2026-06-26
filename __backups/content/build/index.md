@@ -63,6 +63,6 @@ Sanding them off is not only worth it, but often the best decision one can do fo
 
 Have papercuts that you'd like cured? Parts of your developer experience that could be better but you just don't have the time to get a degree from the University of Bazel?
 
-<a href="https://tidycal.com/bytebard/initial-consultation" target="_blank" class="home-site-nav" style="font-size: x-large; margin-bottom: 3rem;">
+<a href="https://calendar.app.google/3jAAbm3znGXVotqi8" target="_blank" class="home-site-nav" style="font-size: x-large; margin-bottom: 3rem;">
 Click here to book a free initial consultation
 </a>

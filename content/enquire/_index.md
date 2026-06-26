@@ -13,7 +13,7 @@ There are two ways for you to get in touch with us.
 
 Firstly, you can email us at **contact@bytebard.software**.
 
-Or you can fill out the enquiry form below.
+Or you can just book a call with us below.
 
 We work internationally, but our best timezones are in EMEA.
 
