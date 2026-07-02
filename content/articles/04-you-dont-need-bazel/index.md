@@ -9,11 +9,31 @@ I know the title sounds like clickbait, but hear me out.
 
 I make a living helping people with their Bazel builds. My ability to put food on the table is directly correlated with more people using Bazel. I've staked my career in the fact that people need great builds, and that Bazel is a great way to get there.
 
-So please believe that I don't say this lightly: Most organizations shouldn't be using Bazel.
+So please believe that I don't say this lightly: **Most organizations shouldn't be using Bazel.**
 
 Here's what I've observed, after almost a decade knee-deep in the hermeticity trenches.
 
-## The Big One: You Need At Least 6 People In Your Bazel Team
+## Point 1: Never Start With Bazel
+
+Please, please don't start a new project with Bazel. Unless you're absolutely sure that your organization is going to grow to hundreds of engineers, just stick to whatever Hello World your language of choice gives you.
+
+Let's really think about it. When you're starting out in a project, you have Big Questions to think about: What am I building? Is this even _worth_ building? _Should_ I be building this? Does anyone want this?
+
+Compared to those, "should I strive for hermetic builds to gain 50% faster CI?" shouldn't even qualify as a nagging thought.
+Any extra effort you spend on finding the right ruleset, or wiring toolchains together, or anything that is not absolutely required to get the thing running is time you're taking away from the things that will make your project succeed.
+Just pick whatever build tool is in vogue for the language of your choosing, and move on.
+Until you get to ~100k lines of code, you're not going to notice the difference in build performance anyway.
+
+The only exception I've seen, the only case where I _would_ recommend starting with Bazel, is any time you really care about which compiler you're using.
+Mostly, this applies to embedded systems, and systems that need to cross-compile to target a specific, esoteric, and custom system.
+In these cases, _you're already opting into build pain_, so it makes sense to pick a tool that helps you surface, reason about, and manage that pain, like Bazel.
+
+But if you're building a web sevice, even in Rust, please just use Cargo.
+
+If the project gets big enough, we can talk about migrating to Bazel.
+But even then...
+
+## You Need At Least 6 People In Your Bazel Team
 
 After working with dozens of teams and organizations, and gathering hundreds of second-hand data points, I observed the following: The teams that struggled with Bazel the most were the smallest ones. This appears pretty obvious, until you couple it with the fact that **this held true, regardless of the overall size of the org they were serving**.
 
@@ -27,7 +47,7 @@ Which is my main point: Most organizations aren't ready to have 6 full-time Baze
 
 ### Wait, Why Does This Happen?
 
-To be honest, I don't know. I have enough data to say that it _is_ true with confidence, but I only have guesses as to why. 
+To be honest, I don't know. I have enough data to say that it _is_ true, but I only have guesses as to _why_. 
 
 Anecdotally, it seems to me that:
 
@@ -52,6 +72,8 @@ So, if your codebase is:
 I'd say just don't bother -- Bazel will probably not transform your build enough to be worth the effort.
 
 Put another way, **Bazel is the best build system to migrate to when you have no other choice**.
+
+And anyway...
 
 ## Your IDE Support Will Likely Get Worse
 
@@ -78,7 +100,13 @@ Good question! Of course, I think Bazel is a wonderful tool... to solve a certai
 - Suffers from multi-hour CI builds routinely,
 - Needs a lot of language interoperability, or works on old languages without modern tooling support,
 
-Bazel _might_ be a good choice for you. It's still unclear without knowing the specific problems you're trying to solve with Bazel.
+Bazel _might_ be a good choice for you.
+
+If you're working on something that requires cross-compilation, or otherwise need to think hard about your CC toolchain, Bazel _might_ be for you.
+
+It's still unclear without knowing your specific problems.
+
+In all other cases, **please just use `{cargo,uv,pnpm,go,...}`**.
 
 If you'd like a second opinion, [get in touch](https://bytebard.software/enquire/?utm_campaign=not-need-bazel)! I'd be very happy to chat about your organization, your problems, and do my best to help you decide. And if you're in the middle of a Bazel migration and find yourself underwater and understaffed, there is hope! This post can be a good tool to secure more headcount.
 
@@ -93,3 +121,4 @@ We'll return to our regularly scheduled tips and tricks soon.
 [^2]: I pulled this breakpoint out of thin air, and it definitely varies by language. Rust or heavily-templated C++ builds taking 30 minutes is par for the course, whereas a 30min Go build is egregious.
 
 [^3]: I don't want to sound dismissive, because I _also_ care a lot about that. To a fault, some would say. How do you think I ended doing DevEx professionally?
+
