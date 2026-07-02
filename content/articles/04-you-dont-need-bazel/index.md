@@ -28,7 +28,7 @@ The only exception I've seen, the only case where I _would_ recommend starting w
 Mostly, this applies to embedded systems, and systems that need to cross-compile to target a specific, esoteric, and custom system.
 In these cases, _you're already opting into build pain_, so it makes sense to pick a tool that helps you surface, reason about, and manage that pain, like Bazel.
 
-But if you're building a web sevice, even in Rust, please just use Cargo.
+But if you're building a web service, even in Rust, please just use Cargo.
 
 If the project gets big enough, we can talk about migrating to Bazel.
 But even then...
@@ -37,7 +37,7 @@ But even then...
 
 After working with dozens of teams and organizations, and gathering hundreds of second-hand data points, I observed the following: The teams that struggled with Bazel the most were the smallest ones. This appears pretty obvious, until you couple it with the fact that **this held true, regardless of the overall size of the org they were serving**.
 
-So, a team of 2-4 people struggled to serve 20 engineers just as much as 100, whereas I've seen build teams of 8-10 serve comfortably companies of 1000 engineers. To put it in other words: Bazel's returns on investment are non-linear. Or even better, to put it visually:
+So, a team of 2-4 people struggled to serve 20 engineers just as much as 100, whereas I've seen build teams of 8-10 serve companies of 1000 engineers comfortably. To put it in other words: Bazel's returns on investment are non-linear. Or even better, to put it visually:
 
 ![Bazel team size vs org size](./team-size-graph.png)
 
@@ -52,16 +52,16 @@ To be honest, I don't know. I have enough data to say that it _is_ true, but I o
 Anecdotally, it seems to me that:
 
 - There is always a minimum of work involved in keeping the Bazel lights on: You need to make sure the rulesets you depend on are up to date (and contribute fixes if not), you need to keep up with Bazel versions, figure out what the heck to do with protobuf, that sort of thing. This is a constant of work that (1) will probably be unique to your organization, and (2) doesn't really depend on the size of the org.
-- You may find yourself maintaining infrastructure. Bazel's promise is that it's so hermetic you can have an artifact cache in the cloud to prevent 80% of your build actions. Well, since you did all the work to migrate, it stands to reason that you should stand up a cache to reap the benefits, right? Well, keeping a live service up is a non-trivial task. Suddenly, you have oncall rotations, and outages, and you need to procure capacity from whoever manages your clusters, etcetera. Build cache services are relatively easy to maintain, but even in the best of days they take a non-trivial amount of overhead[^1].
+- You may find yourself maintaining infrastructure. Bazel's promise is that it's so hermetic you can have an artifact cache in the cloud to avoid 80% of your build actions. Well, since you did all the work to migrate, it stands to reason that you should stand up a cache to reap the benefits, right? Well, keeping a live service up is a non-trivial task. Suddenly, you have oncall rotations, and outages, and you need to procure capacity from whoever manages your clusters, etcetera. Build cache services are relatively easy to maintain, but even in the best of days they take a non-trivial amount of overhead[^1].
 - You get more customer support requests: Most engineers out there are very comfortable with native tools, and have no idea Bazel exists. When something breaks in `cargo`, their first instinct is usually to Google it, and it's likely they'll find a solution. When something breaks in Bazel, _even if they try to Google it_, chances are they'll end up just reaching out to your team.
 
-So, yeah. Unfortunately, I'd recommend your team be at least 6 tall to ride in the Bazel rollercoaster.
+So, yeah. Unfortunately, I'd recommend your team be at least 6 tall to ride on the Bazel rollercoaster.
 
 ## Your Project Is Mostly In One (Modern) Language, And Your Compile Times Are _Fine For Now_
 
 I hope I don't have to convince you that Bazel is much harder to maintain than any other mainstream, modern build system.
 
-Even further: Despite the recent leaps and bounds made by the Bazel community in usability, I think **it always be harder**. After all, Bazel needs to do exactly the same work (calling the same compiler with the same args as any other build system), but it needs to know about _more stuff_ (e.g., Bazel really cares about which CC toolchain you have installed. Most build systems don't).
+Even further: Despite the recent leaps and bounds made by the Bazel community in usability, I think **it will always be harder**. After all, Bazel needs to do exactly the same work (calling the same compiler with the same args as any other build system), but it needs to know about _more stuff_ (e.g., Bazel really cares about which CC toolchain you have installed. Most build systems don't).
 
 So, if your codebase is:
 - Mostly in one language,
@@ -82,9 +82,9 @@ Here's a fact that has become obvious after 10 years in DevEx: Developers care _
 1. The CI server is so unreliable that 10% of the jobs just failed for no reason, and engineers need to re-start a 2-hour job.
 2. Every hour, the IDE just crashes randomly and developers need to take 10 seconds to re-start it.
 
-Most often, (1) will be taken as "par for the course", and may just be joked about in private Slack channels, whereas (2) will have angry developers sending ["friendly pings"](https://goomics.net/191) to your DMs like you cut off the electricty and are holding their PRs hostage.
+Most often, (1) will be taken as "par for the course", and may just be joked about in private Slack channels, whereas (2) will have angry developers sending ["friendly pings"](https://goomics.net/191) to your DMs like you cut off the electricity and are holding their PRs hostage.
 
-Unfortunately, IDE support for Bazel has been a huge pain point for as long as I've been in the community. When I was a maintainer of the IntelliJ plugin, I saw first hand the great work and passion of excellent engineers are putting in to bridge this gap. However, the gap remains large, and I'd argue that it will continue to grow. 
+Unfortunately, IDE support for Bazel has been a huge pain point for as long as I've been in the community. When I was a maintainer of the IntelliJ plugin, I saw first-hand the great work and passion excellent engineers are putting in to bridge this gap. However, the gap remains large, and I'd argue that it will continue to grow. 
 
 So far, there may be 10 or 15 engineers in the world working full time to make IDE support better in Bazel. No matter how good they are, that is just not comparable to the army of engineers working on more mainstream extensions. If Bazel could integrate with existing language servers, this issue would be ameliorated. For now, Bazel will continue to run into the [N+M problem](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#why-language-server), and IDE support will continue to lag behind the mainstream.
 
@@ -120,5 +120,5 @@ We'll return to our regularly scheduled tips and tricks soon.
 
 [^2]: I pulled this breakpoint out of thin air, and it definitely varies by language. Rust or heavily-templated C++ builds taking 30 minutes is par for the course, whereas a 30min Go build is egregious.
 
-[^3]: I don't want to sound dismissive, because I _also_ care a lot about that. To a fault, some would say. How do you think I ended doing DevEx professionally?
+[^3]: I don't want to sound dismissive, because I _also_ care a lot about that. To a fault, some would say. How do you think I ended up doing DevEx professionally?
 
