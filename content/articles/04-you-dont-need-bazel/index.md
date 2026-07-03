@@ -59,7 +59,9 @@ So, yeah. Unfortunately, I'd recommend your team be at least 6 tall to ride on t
 
 {{< callout title="Need help?" >}}
 If you _already are_ deep in a migration with 1-2 engineers, [reach out](https://bytebard.software/enquire/?utm_campaign=not-need-bazel)!
-We can help you make the case to get more headcount, or at the very least get you expert help to get over the hump.
+We can help you make the case to get more headcount, interview the right talent, or at the very least get you expert help to get over the hump.
+
+But really, it's better if you don't get into this situation in the first place.
 {{< /callout >}}
 
 ## Your Project Is Mostly In One (Modern) Language, And Your Compile Times Are _Fine For Now_
