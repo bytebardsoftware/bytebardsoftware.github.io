@@ -57,6 +57,11 @@ Anecdotally, it seems to me that:
 
 So, yeah. Unfortunately, I'd recommend your team be at least 6 tall to ride on the Bazel rollercoaster.
 
+{{< callout title="Need help?" >}}
+If you _already are_ deep in a migration with 1-2 engineers, [reach out](https://bytebard.software/enquire/?utm_campaign=not-need-bazel)!
+We can help you make the case to get more headcount, or at the very least get you expert help to get over the hump.
+{{< /callout >}}
+
 ## Your Project Is Mostly In One (Modern) Language, And Your Compile Times Are _Fine For Now_
 
 I hope I don't have to convince you that Bazel is much harder to maintain than any other mainstream, modern build system.
